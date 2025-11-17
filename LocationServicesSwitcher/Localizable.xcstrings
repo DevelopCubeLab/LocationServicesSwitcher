@@ -34,6 +34,40 @@
         }
       }
     },
+    "AutomaticallySwitchWhenStartingTheApp" : {
+      "comment" : "启动App时自动切换",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatically Switch When Starting The App"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启动App时自动切换"
+          }
+        }
+      }
+    },
+    "AutoSwitchAndExitHintMessage" : {
+      "comment" : "同时打开自动操作和自动退出程序的提示",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simultaneously open '%@' and '%@', and if you need to close them, you can long-press the App icon on the main screen and click '%@' to close '%@'."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同时打开'%@'和'%@'后如果需要关闭可以再主屏幕长按App图标点击'%@'关闭'%@'"
+          }
+        }
+      }
+    },
     "CFBundleDisplayName" : {
       "comment" : "定位开关",
       "localizations" : {
@@ -63,6 +97,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "关闭"
+          }
+        }
+      }
+    },
+    "DisableAutoSwitch" : {
+      "comment" : "禁用自动切换",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disable Auto Switch"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "禁用自动切换"
           }
         }
       }

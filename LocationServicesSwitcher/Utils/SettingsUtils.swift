@@ -14,6 +14,8 @@ class SettingsUtils {
         self.plistManager = PlistManagerUtils.instance(for: "Settings")
     }
     
+    static let disableAutoSwitchShortcutItemID = "com.developlab.LocationServicesSwitcher.quickAction.cancel"
+    
     private func setDefaultSettings() {
         
         if self.plistManager.isPlistExist() {
@@ -29,13 +31,23 @@ class SettingsUtils {
         return writeable
     }
     
-    /// 获取是否切换后退出应用程序
+    /// 获取启动App时自动切换
     func getExitAfterSwitching() -> Bool {
         return plistManager.getBool(key: "ExitAfterSwitching", defaultValue: false)
     }
     
     func setExitAfterSwitching(enable: Bool) {
         plistManager.setBool(key: "ExitAfterSwitching", value: enable)
+        plistManager.apply()
+    }
+    
+    /// 获取是否切换后退出应用程序
+    func getAutomaticallySwitchWhenStartingApp() -> Bool {
+        return plistManager.getBool(key: "AutomaticallySwitchWhenStartingApp", defaultValue: false)
+    }
+    
+    func setAutomaticallySwitchWhenStartingApp(enable: Bool) {
+        plistManager.setBool(key: "AutomaticallySwitchWhenStartingApp", value: enable)
         plistManager.apply()
     }
     
@@ -49,4 +61,30 @@ class SettingsUtils {
         plistManager.apply()
     }
     
+    /// 获取是否由Widget打开app
+    func getLaunchingFromWidget() -> Bool {
+        return plistManager.getBool(key: "LaunchingFromWidget", defaultValue: false)
+    }
+    
+    func setLaunchingFromWidget(enable: Bool) {
+        plistManager.setBool(key: "LaunchingFromWidget", value: enable)
+        plistManager.apply()
+    }
+    
+    // 配置桌面快捷方式
+    func setShortcutItem(application: UIApplication, enable: Bool) {
+        if enable {
+            application.shortcutItems = [
+                UIApplicationShortcutItem(
+                    type: SettingsUtils.disableAutoSwitchShortcutItemID,
+                    localizedTitle: NSLocalizedString("DisableAutoSwitch", comment: ""),
+                    localizedSubtitle: nil,
+                    icon: UIApplicationShortcutIcon(systemImageName: "xmark.circle"),
+                    userInfo: nil
+                )
+            ]
+        } else {
+            application.shortcutItems = []
+        }
+    }
 }

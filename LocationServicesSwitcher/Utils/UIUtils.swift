@@ -21,6 +21,9 @@ class UIUtils {
     
     // 操作后返回主界面
     static func exitApplicationAfterSwitching() {
+        // 处理标记
+        SettingsUtils.instance.setLaunchingFromWidget(enable: false)
+        // 处理退出
         if SettingsUtils.instance.getExitAfterSwitching() {
             UIApplication.shared.perform(#selector(NSXPCConnection.suspend)) // 返回桌面
         }

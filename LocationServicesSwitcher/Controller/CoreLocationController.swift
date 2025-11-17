@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 class CoreLocationController {
     
@@ -35,5 +36,34 @@ class CoreLocationController {
         }
         // 切换失败
         return false
+    }
+    
+    /// 执行完整的定位切换逻辑，包含通知处理与退出
+    func performSwitch(enable: Bool, sendNotifications: Bool, window: UIWindow?) {
+        // 先尝试切换
+        if !setLocationServicesEnabled(enable) {
+            if let root = window?.rootViewController {
+                UIUtils.showAlert(message: NSLocalizedString("SwitchLocationServiceFailed", comment: ""), in: root)
+            }
+            return
+        }
+
+        // 处理通知
+        if sendNotifications {
+            NotificationController.instance.clearAllNotifications()
+            if enable {
+                NotificationController.instance.postFollowUpSilent(
+                    title: NSLocalizedString("TurnOffLocationServices", comment: ""),
+                    identifier: NotificationController.turnOffIdentifier
+                )
+            } else {
+                NotificationController.instance.postFollowUpSilent(
+                    title: NSLocalizedString("TurnOnLocationServices", comment: ""),
+                    identifier: NotificationController.turnOnIdentifier
+                )
+            }
+        }
+        // 自动退出
+        UIUtils.exitApplicationAfterSwitching()
     }
 }

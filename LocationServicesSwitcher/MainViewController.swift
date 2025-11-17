@@ -3,7 +3,7 @@ import CoreLocation
 
 class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    static let versionCode = "1.0"
+    static let versionCode = "1.1"
     
     private var tableView = UITableView()
 
@@ -11,7 +11,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         [NSLocalizedString("LocationServicesStatus", comment: "定位服务状态")],
         [NSLocalizedString("EnableLocationServices", comment: "开启定位服务")],
         [NSLocalizedString("DisableLocationServices", comment: "关闭定位服务")],
-        [NSLocalizedString("ExitAfterSwitching", comment: "切换后退出应用程序")],
+        [NSLocalizedString("AutomaticallySwitchWhenStartingTheApp", comment: "启动App时自动切换"), NSLocalizedString("ExitAfterSwitching", comment: "切换后退出应用程序")],
         [],
         [NSLocalizedString("Version", comment: ""), "GitHub"]
     ]
@@ -59,6 +59,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         )
     }
     
+    // App从后台回来时的回调
     @objc private func appDidBecomeActive() {
         updateLocationStatus()
         updateNotificationsCell()
@@ -117,7 +118,11 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else if indexPath.section == 3 { // 选项
             let switchView = UISwitch(frame: .zero)
             switchView.tag = indexPath.row // 设置识别id
-            switchView.isOn = SettingsUtils.instance.getExitAfterSwitching() // 从配置文件中获取状态
+            if indexPath.row == 0 { // 启动App时自动切换
+                switchView.isOn = SettingsUtils.instance.getAutomaticallySwitchWhenStartingApp() // 从配置文件中获取状态
+            } else if indexPath.row == 1 { // 切换后退出应用程序
+                switchView.isOn = SettingsUtils.instance.getExitAfterSwitching() // 从配置文件中获取状态
+            }
             // 开光状态改变的回调
             switchView.addAction(UIAction { [weak self] action in
                 self?.onSwitchChanged(action.sender as! UISwitch)
@@ -127,7 +132,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else if indexPath.section == 4 {
             if indexPath.row == 0 {
                 let switchView = UISwitch(frame: .zero)
-                switchView.tag = 1 // 设置识别id
+                switchView.tag = 2 // 设置识别id
                 switchView.isOn = SettingsUtils.instance.getEnableNotifications() // 从配置文件中获取状态
                 // 开光状态改变的回调
                 switchView.addAction(UIAction { [weak self] action in
@@ -171,6 +176,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
                 // 显示错误弹窗
                 UIUtils.showAlert(message: NSLocalizedString("SwitchLocationServiceFailed", comment: "切换失败提示"), in: self)
             } else {
+                // 静默发送一个相反的通知
+                sendMuteNotification(enableLocationServer: indexPath.section == 2)
                 UIUtils.exitApplicationAfterSwitching()
             }
             // 刷新开关状态
@@ -201,8 +208,28 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     /// 当开关更改的时候的方法
     private func onSwitchChanged(_ sender: UISwitch) {
         if sender.tag == 0 {
-            SettingsUtils.instance.setExitAfterSwitching(enable: sender.isOn)
+            SettingsUtils.instance.setAutomaticallySwitchWhenStartingApp(enable: sender.isOn)
+            if sender.isOn && SettingsUtils.instance.getExitAfterSwitching() {
+                // 显示提示
+                UIUtils.showAlert(message: String.localizedStringWithFormat(NSLocalizedString("AutoSwitchAndExitHintMessage", comment: "同时打开自动操作和自动退出程序的提示"), NSLocalizedString("AutomaticallySwitchWhenStartingTheApp", comment: ""),NSLocalizedString("ExitAfterSwitching", comment: ""), NSLocalizedString("DisableAutoSwitch", comment: ""), NSLocalizedString("AutomaticallySwitchWhenStartingTheApp", comment: "")), in: self)
+                // 配置桌面快捷方式
+                SettingsUtils.instance.setShortcutItem(application: UIApplication.shared, enable: true)
+            } else {
+                // 配置桌面快捷方式
+                SettingsUtils.instance.setShortcutItem(application: UIApplication.shared, enable: false)
+            }
         } else if sender.tag == 1 {
+            SettingsUtils.instance.setExitAfterSwitching(enable: sender.isOn)
+            if sender.isOn && SettingsUtils.instance.getAutomaticallySwitchWhenStartingApp() {
+                // 显示提示
+                UIUtils.showAlert(message: String.localizedStringWithFormat(NSLocalizedString("AutoSwitchAndExitHintMessage", comment: "同时打开自动操作和自动退出程序的提示"), NSLocalizedString("AutomaticallySwitchWhenStartingTheApp", comment: ""),NSLocalizedString("ExitAfterSwitching", comment: ""), NSLocalizedString("DisableAutoSwitch", comment: ""), NSLocalizedString("AutomaticallySwitchWhenStartingTheApp", comment: "")), in: self)
+                // 配置桌面快捷方式
+                SettingsUtils.instance.setShortcutItem(application: UIApplication.shared, enable: true)
+            } else {
+                // 配置桌面快捷方式
+                SettingsUtils.instance.setShortcutItem(application: UIApplication.shared, enable: false)
+            }
+        } else if sender.tag == 2 {
             if sender.isOn {
                 // 判断通知权限
                 NotificationController.instance.ensureAuthorization { status in
@@ -282,6 +309,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
 
                 self.tableView.reloadSections([4], with: .none)
+                // 刷新下自动切换开关，解决当用户点击快捷方式禁用后没有进行操作
+                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 3)], with: .none)
             }
         }
     }
@@ -306,6 +335,18 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         // iOS 15 以及更早靠 openSettingsURLString 跳转到 App 设置页
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    private func sendMuteNotification(enableLocationServer: Bool) {
+        if SettingsUtils.instance.getEnableNotifications() {
+            // 先清除通知
+            NotificationController.instance.clearAllNotifications()
+            if enableLocationServer { // 发送静默通知
+                NotificationController.instance.postFollowUpSilent(title: NSLocalizedString("TurnOnLocationServices", comment: ""), identifier: NotificationController.turnOnIdentifier)
+            } else {
+                NotificationController.instance.postFollowUpSilent(title: NSLocalizedString("TurnOffLocationServices", comment: ""), identifier: NotificationController.turnOffIdentifier)
+            }
         }
     }
     

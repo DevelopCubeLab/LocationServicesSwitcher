@@ -1,6 +1,6 @@
 Package: com.developlab.locationservicesswitcher
 Name: LocationServicesSwitcher
-Version: 1.0
+Version: 1.1
 Architecture: iphoneos-arm
 Description: iOS TrollStore Location Services Switcher
 Maintainer: developlab
