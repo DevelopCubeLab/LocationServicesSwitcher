@@ -135,23 +135,6 @@
         }
       }
     },
-    "DisableLocationServices" : {
-      "comment" : "关闭定位服务",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Disable Location Services"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "关闭定位服务"
-          }
-        }
-      }
-    },
     "DisableNotifications" : {
       "comment" : "禁用通知",
       "localizations" : {
@@ -202,23 +185,6 @@
         }
       }
     },
-    "EnableLocationServices" : {
-      "comment" : "开启定位服务",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable Location Services"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "开启定位服务"
-          }
-        }
-      }
-    },
     "ExitAfterSwitching" : {
       "comment" : "切换后退出应用程序",
       "localizations" : {
@@ -265,6 +231,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "定位服务状态"
+          }
+        }
+      }
+    },
+    "LocationServicesStatusDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "get Location Services Status"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获取定位服务状态"
           }
         }
       }
@@ -403,6 +385,38 @@
         }
       }
     },
+    "ToggleLocationServices" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toggle Location Services"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "切换定位服务状态(iOS 16+)"
+          }
+        }
+      }
+    },
+    "ToggleLocationServicesDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toggle iOS location services."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "切换定位服务状态，需要iOS 16.0+"
+          }
+        }
+      }
+    },
     "TurnOffLocationServices" : {
       "comment" : "关闭定位服务",
       "localizations" : {
@@ -420,8 +434,40 @@
         }
       }
     },
+    "TurnOffLocationServicesAppIntentTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn Off Location Services (iOS 16.0+)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭定位服务 (iOS 16.0+)"
+          }
+        }
+      }
+    },
+    "TurnOffLocationServicesDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn Off iOS location services."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭系统定位服务"
+          }
+        }
+      }
+    },
     "TurnOnLocationServices" : {
-      "comment" : "打开定位服务",
+      "comment" : "开启定位服务\n打开定位服务",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -433,6 +479,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打开定位服务"
+          }
+        }
+      }
+    },
+    "TurnOnLocationServicesAppIntentTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn On Location Services (iOS 16.0+)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开定位服务 (iOS 16.0+)"
+          }
+        }
+      }
+    },
+    "TurnOnLocationServicesDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn On iOS location services."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开系统定位服务"
           }
         }
       }

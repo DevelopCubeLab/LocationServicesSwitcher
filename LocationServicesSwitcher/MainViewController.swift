@@ -9,8 +9,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     private var tableCellList = [
         [NSLocalizedString("LocationServicesStatus", comment: "定位服务状态")],
-        [NSLocalizedString("EnableLocationServices", comment: "开启定位服务")],
-        [NSLocalizedString("DisableLocationServices", comment: "关闭定位服务")],
+        [NSLocalizedString("TurnOnLocationServices", comment: "开启定位服务")],
+        [NSLocalizedString("TurnOffLocationServices", comment: "关闭定位服务")],
         [NSLocalizedString("AutomaticallySwitchWhenStartingTheApp", comment: "启动App时自动切换"), NSLocalizedString("ExitAfterSwitching", comment: "切换后退出应用程序")],
         [],
         [NSLocalizedString("Version", comment: ""), "GitHub"]
