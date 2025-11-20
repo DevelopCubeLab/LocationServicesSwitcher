@@ -39,13 +39,14 @@ class CoreLocationController {
     }
     
     /// 执行完整的定位切换逻辑，包含通知处理与退出
-    func performSwitch(enable: Bool, sendNotifications: Bool, window: UIWindow?) {
+    func performSwitch(enable: Bool, sendNotifications: Bool, window: UIWindow?) -> Bool {
         // 先尝试切换
         if !setLocationServicesEnabled(enable) {
             if let root = window?.rootViewController {
                 UIUtils.showAlert(message: NSLocalizedString("SwitchLocationServiceFailed", comment: ""), in: root)
+                return false
             }
-            return
+            return true
         }
 
         // 处理通知
@@ -65,5 +66,6 @@ class CoreLocationController {
         }
         // 自动退出
         UIUtils.exitApplicationAfterSwitching()
+        return true
     }
 }

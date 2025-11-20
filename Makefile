@@ -10,7 +10,7 @@ before-all::
 
 # 使用 Xcode 项目构建
 XCODEPROJ_NAME = LocationServicesSwitcher
-BUILD_VERSION = "1.1"
+BUILD_VERSION = "1.2"
 FILE_NAME = "com.developlab.locationservicesswitcher"
 
 # 指定 Theos 使用 xcodeproj 规则

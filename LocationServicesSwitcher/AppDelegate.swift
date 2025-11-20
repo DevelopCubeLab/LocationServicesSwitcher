@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             CoreLocationController.instance.updateLocationServicesStatus()
             if !SettingsUtils.instance.getLaunchingFromWidget() {
                 let target = !CoreLocationController.instance.locationServicesEnabled
-                CoreLocationController.instance.performSwitch(
+                _ = CoreLocationController.instance.performSwitch(
                     enable: target,
                     sendNotifications: SettingsUtils.instance.getEnableNotifications(),
                     window: window
@@ -67,27 +67,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
 
         let type = userActivity.activityType
-
-        if type == "LocationSwitcherOn" { // 打开定位服务
+        
+        if type == "LocationSwitcherOn" || type == "EnableLocationServicesIntent" { // 打开定位服务
             // 标记使用Widget启动
             SettingsUtils.instance.setLaunchingFromWidget(enable: true)
-            CoreLocationController.instance.performSwitch(
+            return CoreLocationController.instance.performSwitch(
                 enable: true,
                 sendNotifications: SettingsUtils.instance.getEnableNotifications(),
                 window: window
             )
         }
 
-        if type == "LocationSwitcherOff" { // 关闭定位服务
+        if type == "LocationSwitcherOff" || type == "DisableLocationServicesIntent" { // 关闭定位服务
             // 标记使用Widget启动
             SettingsUtils.instance.setLaunchingFromWidget(enable: true)
-            CoreLocationController.instance.performSwitch(
+            return CoreLocationController.instance.performSwitch(
                 enable: false,
                 sendNotifications: SettingsUtils.instance.getEnableNotifications(),
                 window: window
             )
         }
-
+        
+        if type == "ToggleLocationServicesIntent" { // 切换定位服务状态
+            // 标记使用Widget启动
+            SettingsUtils.instance.setLaunchingFromWidget(enable: true)
+            let target = !CoreLocationController.instance.locationServicesEnabled
+            return CoreLocationController.instance.performSwitch(
+                enable: target,
+                sendNotifications: SettingsUtils.instance.getEnableNotifications(),
+                window: window
+            )
+        }
+        
         return true
     }
     
@@ -108,7 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
             if id == NotificationController.turnOnIdentifier {
                 // 用户点击“开启定位服务”的通知
-                CoreLocationController.instance.performSwitch(
+                _ = CoreLocationController.instance.performSwitch(
                     enable: true,
                     sendNotifications: true,
                     window: window
@@ -117,7 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
             if id == NotificationController.turnOffIdentifier {
                 // 用户点击“关闭定位服务”的通知
-                CoreLocationController.instance.performSwitch(
+                _ = CoreLocationController.instance.performSwitch(
                     enable: false,
                     sendNotifications: true,
                     window: window
