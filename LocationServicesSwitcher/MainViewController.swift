@@ -3,7 +3,7 @@ import CoreLocation
 
 class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    static let versionCode = "1.1"
+    static let versionCode = "1.2"
     
     private var tableView = UITableView()
 
