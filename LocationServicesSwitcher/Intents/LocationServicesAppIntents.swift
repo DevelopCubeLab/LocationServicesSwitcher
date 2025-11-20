@@ -8,7 +8,7 @@ struct getLocationServicesIntent: AppIntent {
     static var resultType: Bool.Type { Bool.self }
     
     func perform() async throws -> some IntentResult & ReturnsValue<Bool> {
-        let status = CoreLocationController.instance.locationServicesEnabled
+        let status = CLLocationManager.locationServicesEnabled()
         return .result(value: status)
     }
 }
@@ -56,8 +56,10 @@ struct toggleLocationServicesIntent: AppIntent {
     static var resultType: Bool.Type { Bool.self }
     
     func perform() async throws -> some IntentResult & ReturnsValue<Bool> {
+        let enable = CLLocationManager.locationServicesEnabled()
+        let target = !enable
         let result = CoreLocationController.instance.performSwitch(
-            enable: !CoreLocationController.instance.locationServicesEnabled,
+            enable: target,
             sendNotifications: SettingsUtils.instance.getEnableNotifications(),
             window: nil
         )
